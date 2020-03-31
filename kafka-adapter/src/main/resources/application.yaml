@@ -1,0 +1,25 @@
+spring:
+  kafka:
+    producer:
+      batch-size: 16384
+      buffer-memory: 33554432
+      retries: 0
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      bootstrap-servers: ${KAFKA_BROKER_URL:127.0.0.1:29092}
+      properties:
+        schema.registry.url: ${SCHEMA_REGISTRY_URL:http://localhost:8081}
+    consumer:
+      group-id: rcalc-trail-svc-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      bootstrap-servers: ${KAFKA_BROKER_URL:127.0.0.1:29092}
+      properties:
+        schema.registry.url: ${SCHEMA_REGISTRY_URL:http://localhost:8081}
+        specific.avro.reader: true
+
+kafka-adapter:
+  publisher:
+    sync-send-timeoutms: 1000

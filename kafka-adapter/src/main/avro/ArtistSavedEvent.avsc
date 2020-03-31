@@ -1,0 +1,38 @@
+{
+    "name": "ArtistSavedEvent",
+    "namespace": "com.ktech.trail.kafka.events.avro",
+    "type": "record",
+    "fields" : [
+        {
+            "name": "name",
+            "type": {
+                "name": "Name",
+                "type": "record",
+                "fields" : [
+                	{
+                		"name": "givenName",
+                		"type": "string"
+                	},
+                	{
+                		"name": "surName",
+                		"type": "string"
+                	}
+                ]
+            }
+        },
+		{
+			"name": "isni",
+			"type": {
+				"name": "Isni",
+				"type": "record",
+				"fields" : [
+					{
+						"name": "code",
+						"type": "string"
+					}
+				]
+			}
+		}
+
+    ]
+}

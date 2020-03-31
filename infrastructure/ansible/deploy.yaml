@@ -1,0 +1,17 @@
+---
+- hosts: local
+  vars:
+    _system_code: "{{ lookup('env', 'SYSTEM_CODE') }}"
+    _target_environment: "{{ lookup('env', 'TARGET_ENVIRONMENT') }}"
+    _tag: "{{ lookup('env', 'VERSION') }}"
+    _ecs_cluster: "{{ lookup('env', 'CLUSTER_PREFIX') }}"
+    _task_execution_role_name: ecsTaskExecutionRole
+  roles:
+    - {
+      role: ecs-deploy,
+      aws_ecs_cluster: "{{ _ecs_cluster }}-{{ _environment }}",
+      system_code: "{{ _system_code }}",
+      _environment: "{{ _target_environment }}",
+      aws_ecr_tag: "{{ _tag }}",
+      task_execution_role_name: "{{ _task_execution_role_name }}"
+    }

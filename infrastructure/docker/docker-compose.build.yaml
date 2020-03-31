@@ -1,0 +1,7 @@
+version: '3.7'
+services:
+  service:
+    build:
+      context: ../../springboot-adapter
+    container_name: service
+    image: "${DOCKER_IMAGE}:${DOCKER_IMAGE_TAG}"

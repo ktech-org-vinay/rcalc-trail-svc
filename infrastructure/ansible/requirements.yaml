@@ -1,0 +1,3 @@
+- src: git+ssh://git@github.com/ktech-org/ansible-ecs-deploy.git
+  version: v1.2.0
+  name: ecs-deploy

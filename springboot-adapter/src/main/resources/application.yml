@@ -1,0 +1,67 @@
+spring:
+  profiles: default
+server:
+  port: 8080
+
+management:
+  metrics:
+    export:
+      ## ATTENTION: These are all default values,
+      ## There are here as reference only
+      statsd:
+        enabled: true
+        step: 1m
+        flavor: datadog
+        host: localhost
+        post: 8125
+
+  ## Enable actuator endpoints
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+
+app:
+  ## Used as tags in metrics
+  systemCode: ${SYSTEM_CODE:rcalc-trail-svc}
+  environment: ${ENVIRONMENT:dev}
+  awsRegion: ${AWS_REGION:eu-west-1}
+
+db:
+  name: rcalc-trail-svcdb
+  url: "http://localhost:5984"
+
+---
+spring:
+  profiles: development
+
+management:
+  metrics:
+    export:
+      ## disable statsd for local development
+      statsd:
+        enabled: false
+  ## Enable actuator endpoints
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+
+server:
+  port: 8080
+app:
+  ## Used as tags in metrics
+  systemCode: ${SYSTEM_CODE:rcalc-trail-svc}
+  environment: ${ENVIRONMENT:dev}
+  awsRegion: ${AWS_REGION:eu-west-1}
+db:
+  name: rcalc-trail-svcdb
+  url: "http://db:5984"

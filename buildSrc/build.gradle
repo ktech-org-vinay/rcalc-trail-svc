@@ -1,0 +1,19 @@
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
+}
+
+dependencies {
+    compile "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8"
+    compile 'ru.vyarus:gradle-mkdocs-plugin:1.1.0'
+    compile 'com.avast.gradle:gradle-docker-compose-plugin:0.7.1'
+    compile 'org.springframework.boot:spring-boot-gradle-plugin:2.2.4.RELEASE'
+    compile 'io.spring.gradle:dependency-management-plugin:1.0.9.RELEASE'
+    compile 'gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:2.2.2'
+    compile 'com.commercehub.gradle.plugin:gradle-avro-plugin:0.9.1'
+    compile localGroovy()
+    compileOnly gradleApi()
+}

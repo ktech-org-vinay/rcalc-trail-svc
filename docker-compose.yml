@@ -1,0 +1,62 @@
+version: "3.3"
+services:
+  zookeeper:
+    container_name: zk-node
+    image: 'confluentinc/cp-zookeeper:5.2.1'
+    ports:
+      - '2181:2181'
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+  kafka:
+    container_name: kafka-broker
+    image: 'confluentinc/cp-enterprise-kafka:5.2.1'
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_NUM_PARTITIONS: 3
+    ports:
+      - '9092:9092'
+      - '29092:29092'
+  schema-registry:
+    image: confluentinc/cp-schema-registry:5.3.1
+    hostname: schema-registry
+    container_name: schema-registry
+    depends_on:
+      - zookeeper
+      - kafka
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
+  db:
+    image: "couchdb"
+    ports:
+    - target: 5984
+      published: 5984
+      protocol: tcp
+      mode: host
+  rest-api:
+    build:
+      context: ./springboot-adapter
+    environment:
+      - APP_PROFILE=development
+      - ENVIRONMENT=dev
+      - AWS_DEFAULT_REGION=eu-west-1
+      - KAFKA_BROKER_URL=kafka:9092
+      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
+    image: "rcalc-trail-svc-rest-api:0.1.0"
+    ports:
+    - target: 8080
+      published: 8080
+      protocol: tcp
+      mode: host
+    depends_on:
+      - db
+      - kafka

@@ -1,0 +1,39 @@
+site_name: rcalc-trail-svc
+site_author:
+repo_name: rcalc-trail-svc
+repo_url: https://github.com/ktech-org/rcalc-trail-svc
+
+copyright: 'Copyright &copy; 2020 KTech'
+
+theme:
+  name: 'material'
+  logo: 'images/logo.ico'
+  feature:
+    tabs: true
+  palette:
+    primary: 'blue grey'
+    accent: 'indigo'
+
+markdown_extensions:
+  - toc:
+      permalink: True
+  - codehilite
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+nav:
+  - Home: index.md
+  - User guide:
+      - Installation: guide/installation.md
+      - Modules: guide/modules.md
+      - Developer Commands: guide/devcmds.md
+      - Built-in Features:
+          - Observalibity: guide/features/observability.md
+      - Infrastructure:
+          - Bamboo: guide/infrastructure/bamboo.md
+          - Terraform: guide/infrastructure/terraform.md
+
+extra:
+  social:
+    - type: github-alt
+      link: https://github.com/ktech-org

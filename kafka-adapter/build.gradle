@@ -1,0 +1,24 @@
+apply plugin: KtechIdea
+apply plugin: KtechJava
+apply plugin: KtechJacoco
+apply plugin: KtechDockerCompose
+apply plugin: KtechKafka
+
+tasks.getByPath('composeBuild').dependsOn(tasks.getByPath(':kafka-adapter:build'))
+tasks.getByPath('composeUp').dependsOn(tasks.getByPath(':kafka-adapter:build'))
+
+task run {
+    dependsOn composeUp
+}
+
+task stop {
+    finalizedBy composeDown
+}
+
+dockerCompose {
+    testOnlyConfiguration {
+        startedServices = ['zookeeper', 'kafka', 'schema-registry']
+        isRequiredBy(project.tasks.getByName("integrationTest"))
+    }
+}
+

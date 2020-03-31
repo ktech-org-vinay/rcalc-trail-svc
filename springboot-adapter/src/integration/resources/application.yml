@@ -1,0 +1,17 @@
+spring:
+  profiles: default
+server:
+  port: 8080
+db:
+  name: rcalc-trail-svcdb
+  url: "http://localhost:5984"
+
+---
+spring:
+  profiles: development
+
+server:
+  port: 8080
+db:
+  name: rcalc-trail-svcdb
+  url: "http://db:5984"

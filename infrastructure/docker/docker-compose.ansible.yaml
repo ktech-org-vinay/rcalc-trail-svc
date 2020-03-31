@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+  init:
+    image: 067805054192.dkr.ecr.eu-west-1.amazonaws.com/ktech/ansible:${ANSIBLE_VERSION}
+    entrypoint: ["ansible-galaxy"]
+    command: ["install", "-f", "-r", "${ANSIBLE_GALAXY}"]
+    volumes:
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+      - ../ansible:/ansible
+  deploy:
+    image: 067805054192.dkr.ecr.eu-west-1.amazonaws.com/ktech/ansible:${ANSIBLE_VERSION}
+    environment:
+      - ANSIBLE_PLAYBOOK
+      - ANSIBLE_CHECK_MODE
+      - ANSIBLE_VERBOSENESS
+      - SYSTEM_CODE
+      - TARGET_ENVIRONMENT
+      - DOCKER_IMAGE_TAG
+      - CLUSTER_PREFIX
+      - VERSION
+      - SLACK_ENABLED
+      - SLACK_TOKEN
+    volumes:
+      - ~/.aws:/root/.aws:ro
+      - ../ansible:/ansible:ro

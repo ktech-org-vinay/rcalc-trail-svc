@@ -1,0 +1,6 @@
+rootProject.name = 'rcalc-trail-svc'
+include 'core'
+include 'springboot-adapter'
+include 'couchdb-adapter'
+include 'kafka-adapter'
+

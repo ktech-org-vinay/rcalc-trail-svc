@@ -1,0 +1,22 @@
+apply plugin: KtechJava
+apply plugin: KtechJacoco
+apply plugin: KtechDockerCompose
+apply plugin: KtechSpringboot
+
+tasks.getByPath('composeBuild').dependsOn(tasks.getByPath(':springboot-adapter:build'))
+tasks.getByPath('composeUp').dependsOn(tasks.getByPath(':springboot-adapter:build'))
+
+task run {
+    dependsOn composeUp
+}
+
+task stop {
+    finalizedBy composeDown
+}
+
+dockerCompose {
+    testOnlyConfiguration {
+        startedServices = ['db']
+        isRequiredBy(project.tasks.getByName("integrationTest"))
+    }
+}

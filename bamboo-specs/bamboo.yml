@@ -1,0 +1,88 @@
+version: 2
+plan:
+  project-key: epg
+  key: rca
+  name: rcalc-trail-svc
+stages:
+  - Builder:
+      - Java Build
+
+Java Build:
+  tasks:
+    - script:
+        - make build
+    - test-parser:
+        type: junit
+        test-results: '**/build/test-results/test/*.xml'
+  requirements:
+    - system.git.executable
+    - system.docker.executable
+  artifacts:
+    - name: Jars
+      pattern: '**/build/libs/*.jar'
+    - name: Makefile
+      pattern: Makefile
+    - name: Infrastructure
+      pattern: infrastructure/**/*
+  final-tasks:
+    - inject-variables:
+        file: build-vars.txt
+        namespace: BUILD
+        scope: RESULT
+
+---
+version: 2
+
+deployment:
+  name: dev-portal-web-deploy
+  source-plan: EPG-DEVPORTALWEB
+
+release-naming:
+  next-version-name: ${bamboo.BUILD.VERSION}
+
+environments:
+  - Dev
+  - Test
+  - Prod
+
+Dev:
+  tasks:
+    - clean
+    - artifact-download:
+        artifacts:
+          - name: Makefile
+          - name: Infrastructure
+    - script: |
+        export ENVIRONMENT=dev
+        export ANSIBLE_CHECK_MODE=false
+        make deploy
+  triggers:
+    - build-success
+
+Test:
+  tasks:
+    - clean
+    - artifact-download:
+        artifacts:
+          - name: Makefile
+          - name: Infrastructure
+    - script: |
+        export ENVIRONMENT=test
+        export ANSIBLE_CHECK_MODE=false
+        make deploy
+  triggers:
+    - environment-success: Dev
+
+Prod:
+  tasks:
+    - clean
+    - artifact-download:
+        artifacts:
+          - name: Makefile
+          - name: Infrastructure
+    - script: |
+        export ENVIRONMENT=prod
+        export ANSIBLE_CHECK_MODE=false
+        make deploy
+  triggers:
+    - environment-success: Test

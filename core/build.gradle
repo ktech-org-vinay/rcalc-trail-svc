@@ -1,0 +1,6 @@
+apply plugin: KtechJava
+apply plugin: KtechJacoco
+
+dependencies {
+    compile 'io.vavr:vavr:0.9.3'
+}
